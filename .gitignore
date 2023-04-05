@@ -5,6 +5,7 @@ node_modules
 *.log
 *.db
 .env
+.sqlite
 
 # dependencies
 /node_modules
