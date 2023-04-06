@@ -5,8 +5,12 @@ CREATE TABLE "user" (
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "registered_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "employee" BOOLEAN NOT NULL DEFAULT false,
+    "isAdmin" BOOLEAN NOT NULL DEFAULT false,
     "storeId" INTEGER,
-    CONSTRAINT "user_storeId_fkey" FOREIGN KEY ("storeId") REFERENCES "store" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+    "addressId" INTEGER,
+    CONSTRAINT "user_storeId_fkey" FOREIGN KEY ("storeId") REFERENCES "store" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT "user_addressId_fkey" FOREIGN KEY ("addressId") REFERENCES "address" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -95,6 +99,9 @@ CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "user_storeId_key" ON "user"("storeId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "user_addressId_key" ON "user"("addressId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "store_addressId_key" ON "store"("addressId");

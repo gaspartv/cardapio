@@ -64,6 +64,7 @@ const StyledGlobal = createGlobalStyle`
 
         --color-whiteFixed: #FFFFFF;
 
+        --color-primary: rgb(25, 118, 210);
     }
 
     body {

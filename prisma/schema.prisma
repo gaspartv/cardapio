@@ -13,9 +13,14 @@ model User {
     email         String   @unique
     password      String
     registered_at DateTime @default(now())
+    employee      Boolean  @default(false)
+    isAdmin       Boolean  @default(false)
 
     store_  Store? @relation(fields: [storeId], references: [id])
     storeId Int?   @unique
+
+    address_  Address? @relation(fields: [addressId], references: [id])
+    addressId Int?     @unique
 
     @@map("user")
 }
@@ -118,6 +123,7 @@ model Address {
     city         String
     state        String
     Store        Store?
+    User         User?
 
     @@map("address")
 }

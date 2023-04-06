@@ -1,17 +1,19 @@
-import { CreateUserRes } from '@/src/mappers';
 import { corsMiddleware } from '@/src/middlewares/cors.middleware';
-import { createUserReqShema } from '@/src/schemas/user/createUser.schema';
+import { recoveryUserReqShema } from '@/src/schemas/user/recoveryUser.schema';
 import { PrismaClient } from '@prisma/client';
 import { hashSync } from 'bcryptjs';
 import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer';
 
+interface CustomError extends Error {
+  customProperty: any;
+}
 const cors = corsMiddleware(Cors({ methods: ['POST'] }));
 
 const prisma = new PrismaClient();
 
-export default async function createUser(
+export default async function recoveryUser(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -23,39 +25,31 @@ export default async function createUser(
   }
 
   try {
-    await createUserReqShema.validate(req.body);
+    await recoveryUserReqShema.validate(req.body);
   } catch (e: any) {
-    res.status(400).json({ message: e.message });
+    res.status(400).json({ message: e.response.data.message });
     return;
   }
 
-  const { name, email } = req.body;
+  const { email } = req.body;
 
   const emailFound = await prisma.user.findFirst({
     where: { email },
   });
 
-  if (emailFound) {
-    res.status(400).json({ message: 'Email já cadastrado.' });
+  if (!emailFound) {
+    res.status(404).json({ message: 'Email não encontrado.' });
     return;
   }
 
-  const usersCount = await prisma.user.count();
-
-  let isAdmin = false;
-
-  if (usersCount === 0) isAdmin = true;
-  
   const password = Math.random()
     .toString(36)
     .slice(-10);
 
-  const newUser = await prisma.user.create({
+  const editUser = await prisma.user.update({
+    where: { email },
     data: {
-      email,
-      name,
       password: hashSync(password, 10),
-      isAdmin
     },
   });
 
@@ -73,13 +67,11 @@ export default async function createUser(
       from: process.env.SMTPUSER,
       to: process.env.SMTPUSER,
       replyTo: process.env.SMTPUSER,
-      subject: 'Sua senha chegou!',
+      subject: 'Sua nova senha chegou!',
       html: `<p><strong>Senha: </strong>${password}</p>`,
     })
     .then((res) => res)
     .catch((error) => console.error(error));
 
-  const user = CreateUserRes.handle(newUser);
-
-  res.status(201).json({ user });
+  res.status(200);
 }

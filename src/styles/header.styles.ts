@@ -6,6 +6,7 @@ export const animationEntring = keyframes`
 `;
 
 export const HeaderStyled = styled.header`
+  border-bottom: 1px solid var(--color-grey-5);
   > div {
     > div {
       display: flex;
@@ -88,6 +89,7 @@ export const HeaderNavStyled = styled.nav`
     align-items: center;
     gap: 12px;
     padding: 12px 0;
+    margin: 0 12px;
     > button {
       background-color: transparent;
       cursor: pointer;
@@ -119,6 +121,7 @@ export const HeaderNavStyled = styled.nav`
     display: flex;
     gap: 5px;
     align-items: center;
+    margin: 0 12px;
     > p {
       color: var(--color-grey-4);
       font-size: 13px;

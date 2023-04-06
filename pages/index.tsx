@@ -17,7 +17,6 @@ const Home = ({ users }: any) => {
                 alt="Banner"
                 width={500}
                 height={500}
-                layout="fixed"
               />
               <div>
                 <h1>Original Burguer</h1>
@@ -45,11 +44,11 @@ const Home = ({ users }: any) => {
                 <span />
               </button>
               <button>
-                Horários
+                Horário
                 <span />
               </button>
               <button>
-                Pagamentos
+                Pagamento
                 <span />
               </button>
             </span>

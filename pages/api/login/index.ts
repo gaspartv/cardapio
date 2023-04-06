@@ -7,7 +7,7 @@ import Cors from 'cors';
 import jwt from 'jsonwebtoken';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const cors = corsMiddleware(Cors({ methods: ['GET'] }));
+const cors = corsMiddleware(Cors({ methods: ['POST'] }));
 
 const prisma = new PrismaClient();
 
