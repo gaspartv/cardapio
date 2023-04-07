@@ -19,8 +19,8 @@ export default async function createUser(
 
   try {
     await loginReqShema.validate(req.body);
-  } catch (error: any) {
-    res.status(400).json({ message: error.message });
+  } catch ({ message }: any) {
+    res.status(400).json({ message });
     return;
   }
 
@@ -38,7 +38,9 @@ export default async function createUser(
     return res.status(401).json({ message: 'Email ou senha invalida!' });
   }
 
-  const token = jwt.sign({ type: user.id }, process.env.SECRET_KEY!, {
+  console.log();
+
+  const token = jwt.sign({ type: user.email }, process.env.SECRET_KEY!, {
     subject: user.id.toString(),
     expiresIn: '24h',
   });

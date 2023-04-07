@@ -8,6 +8,8 @@ export class CreateUserRes {
     email,
     addressId,
     registered_at,
+    employee,
+    isAdmin,
     storeId,
   }: User): IUserRes {
     return {
@@ -15,6 +17,8 @@ export class CreateUserRes {
       name,
       email,
       registered_at,
+      employee,
+      isAdmin,
       addressId,
       storeId,
     };

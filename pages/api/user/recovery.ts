@@ -6,10 +6,7 @@ import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer';
 
-interface CustomError extends Error {
-  customProperty: any;
-}
-const cors = corsMiddleware(Cors({ methods: ['POST'] }));
+const cors = corsMiddleware(Cors({ methods: ['PATCH'] }));
 
 const prisma = new PrismaClient();
 
@@ -19,16 +16,16 @@ export default async function recoveryUser(
 ) {
   await cors(req, res);
 
-  if (req.method !== 'POST') {
-    res.status(405).json({ message: 'Method not allowed' });
-    return;
-  }
+  if (req.method !== 'PATCH')
+    return res.status(405).json({ message: 'Método não permitido' });
 
   try {
-    await recoveryUserReqShema.validate(req.body);
-  } catch (e: any) {
-    res.status(400).json({ message: e.response.data.message });
-    return;
+    await recoveryUserReqShema.validate(req.body, {
+      stripUnknown: true,
+      abortEarly: false,
+    });
+  } catch ({ message }: any) {
+    return res.status(400).json({ message });
   }
 
   const { email } = req.body;
@@ -37,20 +34,16 @@ export default async function recoveryUser(
     where: { email },
   });
 
-  if (!emailFound) {
-    res.status(404).json({ message: 'Email não encontrado.' });
-    return;
-  }
+  if (!emailFound)
+    return res.status(404).json({ message: 'Email não cadastrado.' });
 
   const password = Math.random()
     .toString(36)
     .slice(-10);
 
-  const editUser = await prisma.user.update({
+  const user = await prisma.user.update({
     where: { email },
-    data: {
-      password: hashSync(password, 10),
-    },
+    data: { password: hashSync(password, 10) },
   });
 
   const transporter = nodemailer.createTransport({
@@ -65,13 +58,13 @@ export default async function recoveryUser(
   transporter
     .sendMail({
       from: process.env.SMTPUSER,
-      to: process.env.SMTPUSER,
-      replyTo: process.env.SMTPUSER,
+      to: user.email,
+      replyTo: user.email,
       subject: 'Sua nova senha chegou!',
       html: `<p><strong>Senha: </strong>${password}</p>`,
     })
     .then((res) => res)
     .catch((error) => console.error(error));
 
-  res.status(200);
+  return res.status(200).json({ message: 'Nova senha enviada por email.' });
 }

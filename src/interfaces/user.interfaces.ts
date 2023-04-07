@@ -13,6 +13,8 @@ export interface IUserRes {
   name: string;
   email: string;
   registered_at: Date;
+  employee: boolean;
+  isAdmin: boolean;
   addressId: number | null;
   storeId: number | null;
 }

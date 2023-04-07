@@ -2,7 +2,6 @@ import BorderColorIcon from '@mui/icons-material/BorderColor';
 import { MainDashboardStyled } from '../styles/mainDashboard.styles';
 
 export const DashboardAddressComponent = ({ userAddress }: any) => {
-  console.log(userAddress);
   return (
     <MainDashboardStyled className="container">
       <div>

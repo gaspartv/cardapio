@@ -31,7 +31,7 @@ const RecoveryPage = () => {
     setLoad(true);
 
     try {
-      await axios.post('/api/user/recovery', { email });
+      await axios.patch('/api/user/recovery', { email });
 
       toast.success('Nova senha enviada para seu email.');
 

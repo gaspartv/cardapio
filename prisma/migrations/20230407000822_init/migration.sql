@@ -1,32 +1,32 @@
 -- CreateTable
 CREATE TABLE "user" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "registered_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "employee" BOOLEAN NOT NULL DEFAULT false,
     "isAdmin" BOOLEAN NOT NULL DEFAULT false,
-    "storeId" INTEGER,
-    "addressId" INTEGER,
+    "storeId" TEXT,
+    "addressId" TEXT,
     CONSTRAINT "user_storeId_fkey" FOREIGN KEY ("storeId") REFERENCES "store" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT "user_addressId_fkey" FOREIGN KEY ("addressId") REFERENCES "address" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "store" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
     "desc" TEXT NOT NULL,
     "cnpj" TEXT NOT NULL,
     "pix" TEXT NOT NULL,
     "phone" TEXT NOT NULL,
-    "minimumOrder" TEXT NOT NULL,
+    "minimumOrder" DECIMAL NOT NULL,
     "image" TEXT NOT NULL,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "addressId" INTEGER NOT NULL,
-    "deliveryOrWhithdrawId" INTEGER NOT NULL,
-    "openingId" INTEGER NOT NULL,
+    "addressId" TEXT NOT NULL,
+    "deliveryOrWhithdrawId" TEXT NOT NULL,
+    "openingId" TEXT NOT NULL,
     CONSTRAINT "store_addressId_fkey" FOREIGN KEY ("addressId") REFERENCES "address" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "store_deliveryOrWhithdrawId_fkey" FOREIGN KEY ("deliveryOrWhithdrawId") REFERENCES "deliveryOrWhithdraw" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "store_openingId_fkey" FOREIGN KEY ("openingId") REFERENCES "opening" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
@@ -34,27 +34,27 @@ CREATE TABLE "store" (
 
 -- CreateTable
 CREATE TABLE "star" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" TEXT NOT NULL PRIMARY KEY,
     "storeName" TEXT NOT NULL,
     "clientName" TEXT NOT NULL,
     "note" DECIMAL NOT NULL,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "comment" TEXT NOT NULL,
-    "storeId" INTEGER,
+    "storeId" TEXT,
     CONSTRAINT "star_storeId_fkey" FOREIGN KEY ("storeId") REFERENCES "store" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "product" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
-    "storeId" INTEGER,
+    "storeId" TEXT,
     CONSTRAINT "product_storeId_fkey" FOREIGN KEY ("storeId") REFERENCES "store" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "opening" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" TEXT NOT NULL PRIMARY KEY,
     "storeName" TEXT NOT NULL,
     "monday" TEXT NOT NULL,
     "tuesday" TEXT NOT NULL,
@@ -67,28 +67,28 @@ CREATE TABLE "opening" (
 
 -- CreateTable
 CREATE TABLE "deliveryOrWhithdraw" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" TEXT NOT NULL PRIMARY KEY,
     "delivery" BOOLEAN NOT NULL,
     "whithdraw" BOOLEAN NOT NULL
 );
 
 -- CreateTable
 CREATE TABLE "category" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
     "desc" TEXT NOT NULL,
     "image" TEXT NOT NULL,
-    "productsId" INTEGER,
+    "productsId" TEXT,
     CONSTRAINT "category_productsId_fkey" FOREIGN KEY ("productsId") REFERENCES "product" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "address" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
     "zipcode" TEXT NOT NULL,
     "street" TEXT NOT NULL,
-    "streetNumber" TEXT NOT NULL,
+    "streetNumber" DECIMAL NOT NULL,
     "borough" TEXT NOT NULL,
     "city" TEXT NOT NULL,
     "state" TEXT NOT NULL
